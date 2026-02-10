@@ -1,0 +1,120 @@
+.login-container {
+  height: 100vh;
+
+  background-image:
+    linear-gradient(
+      135deg,
+      rgba(30, 58, 138, 0.75),
+      rgba(37, 99, 235, 0.75),
+      rgba(59, 130, 246, 0.75)
+    ),
+    url("/login-bg.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.login-card {
+  width: 420px;
+  padding: 45px;
+  border-radius: 16px;
+  text-align: center;
+
+  background: #eff6ff; /* light blue */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+
+
+.google{
+    width: 20px;
+    height: 20px;
+}
+.google-btn {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #c7d2fe;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background: white;
+  font-weight: 500;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;   /* space between items */
+}
+
+.login-form label {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.login-form input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #c7d2fe;
+  font-size: 14px;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+
+.login-btn {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: #1e40af;
+}
+
+.divider {
+  margin: 15px 0;
+  font-weight: bold;
+}
+.logo {
+  width: 70px;
+  margin-bottom: 15px;
+}
+
+.login-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.login-card p {
+  font-size: 14px;
+  color: #475569;
+  margin-bottom: 25px;
+}
+
