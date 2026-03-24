@@ -29,7 +29,7 @@ const Login = () => {
       }
 
       // ✅ Login success
-      navigate("/dashboard");
+      navigate("/dashboard/home");
 
     } catch (err) {
       setError("Server error");

@@ -126,7 +126,7 @@ const Student = () => {
             <th>Student Name</th>
             <th>Register No</th>
             <th>Type</th>
-            <th>Description</th>
+            
             <th>Date</th>
             <th>Contact No</th>
             <th>Status</th>
@@ -138,7 +138,7 @@ const Student = () => {
               <td>{c.studentName}</td>
               <td>{c.registerNo}</td>
               <td>{c.type}</td>
-              <td>{c.description}</td>
+              
               <td>{new Date(c.date).toLocaleDateString()}</td>
               <td>{c.contactNo}</td>
                {/* ✅ STATUS COLUMN */}

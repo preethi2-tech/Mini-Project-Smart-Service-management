@@ -128,7 +128,7 @@ const Home = () => {
               <th>Student Name</th>
               <th>Roll No</th>
               <th>Problem</th>
-              <th>Description</th>
+              
               <th>Staff Assigned</th>
               <th>Status</th>
             </tr>
@@ -147,7 +147,7 @@ const Home = () => {
                   <td>{c.studentName}</td>
                   <td>{c.registerNo}</td>
                   <td>{c.type}</td>
-                  <td>{c.description}</td>
+                  
                   <td>{c.staffAssigned || "-"}</td>
                   <td>
                     <span

@@ -71,7 +71,7 @@ const Admin = () => {
               <th>Student Name</th>
               <th>Roll No</th>
               <th>Problem</th>
-              <th>Description</th>
+              
               <th>Date</th>
               <th>Contact</th>
               <th>Status</th>
@@ -91,7 +91,7 @@ const Admin = () => {
                   <td>{c.studentName}</td>
                   <td>{c.registerNo}</td>
                   <td>{c.type}</td>
-                  <td>{c.description}</td>
+                  
                   <td>{new Date(c.date).toLocaleDateString()}</td>
                   <td>{c.contactNo}</td>
                   <td><span

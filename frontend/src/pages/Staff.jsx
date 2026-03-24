@@ -5,6 +5,8 @@ const Staff = () => {
   const [complaints, setComplaints] = useState([]);
   const [resolvedComplaints, setResolvedComplaints] = useState([]);
 
+  const [selectedComplaint, setSelectedComplaint] = useState(null);
+
   const [updateData, setUpdateData] = useState({
     complaintId: "",
     staffAssigned: "",
@@ -18,7 +20,7 @@ const Staff = () => {
     fetchResolvedComplaints();
   }, []);
 
-  // Assigned complaints (In Progress only)
+  // Fetch Assigned Complaints
   const fetchAssignedComplaints = async () => {
     try {
       const res = await axios.get(
@@ -35,10 +37,12 @@ const Staff = () => {
     }
   };
 
-  // Completed complaints summary
+  // Fetch Completed Complaints
   const fetchResolvedComplaints = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/complaints");
+      const res = await axios.get(
+        "http://localhost:5000/api/complaints"
+      );
 
       const completed = res.data.filter(
         (c) =>
@@ -83,6 +87,8 @@ const Staff = () => {
         remarks: "",
       });
 
+      setSelectedComplaint(null);
+
       fetchAssignedComplaints();
       fetchResolvedComplaints();
     } catch (error) {
@@ -94,6 +100,7 @@ const Staff = () => {
 
   return (
     <div style={{ padding: "10px" }}>
+
       {/* Welcome */}
       <div className="welcome-box1">
         <h1>Welcome Staff 👋</h1>
@@ -101,176 +108,271 @@ const Staff = () => {
       </div>
 
       {/* ================= ASSIGNED TABLE ================= */}
+
       <div className="section-card">
-      <h3 className="section-title">Assigned Complaints (In Progress)</h3>
 
+        <h3 className="section-title">
+          Assigned Complaints (In Progress)
+        </h3>
 
-      <table  className="complaint-table" >
-        <thead style={{ background: "#1f3c88", color: "white" }}>
-          <tr>
-            <th>Student Name</th>
-            <th>Roll No</th>
-            <th>Problem</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Contact No</th>
-            <th>Assigned Staff</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+        <table className="complaint-table">
 
-        <tbody>
-          {complaints.length === 0 ? (
+          <thead style={{ background: "#1f3c88", color: "white" }}>
             <tr>
-              <td colSpan="7" style={{ textAlign: "center" }}>
-                No In-Progress complaints
-              </td>
+              <th>Student Name</th>
+              <th>Roll No</th>
+              <th>Problem</th>
+              
+              <th>Date</th>
+              <th>Contact No</th>
+              <th>Assigned Staff</th>
+              <th>Status</th>
             </tr>
-          ) : (
-            complaints.map((c) => (
-              <tr key={c._id}>
-                <td>{c.studentName}</td>
-                <td>{c.registerNo}</td>
-                <td>{c.type}</td>
-                <td>{c.description}</td>
-                <td>{new Date(c.date).toLocaleDateString()}</td>
-                <td>{c.contactNo}</td>
-                <td>{c.staffAssigned}</td>
-                <td>
-                  <span className="status-badge status-inprogress">
-                      In Progress
-                    </span>
+          </thead>
 
+          <tbody>
+            {complaints.length === 0 ? (
+              <tr>
+                <td colSpan="8" style={{ textAlign: "center" }}>
+                  No In-Progress complaints
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              complaints.map((c) => (
+                <tr key={c._id}>
+                  <td>{c.studentName}</td>
+                  <td>{c.registerNo}</td>
+                  <td>{c.type}</td>
+                  
+                  <td>{new Date(c.date).toLocaleDateString()}</td>
+                  <td>{c.contactNo}</td>
+                  <td>{c.staffAssigned}</td>
+
+                  <td>
+                    <span className="status-badge status-inprogress">
+                      In Progress
+                    </span>
+                  </td>
+
+                </tr>
+              ))
+            )}
+          </tbody>
+
+        </table>
+
       </div>
 
       {/* ================= RESOLVE FORM ================= */}
-       <div className="section-card">
-      <h3 style={{ marginTop: "30px" }}>Resolve Complaint</h3>
 
-      <form
-        onSubmit={handleUpdateSubmit}
-        style={{
-          background: "#fff",
-          padding: "20px",
-          borderRadius: "10px",
-          marginTop: "10px",
-          display: "flex",
-          gap: "10px",
-          flexWrap: "wrap",
-        }}
-      >
-        <select
-          name="complaintId"
-          value={updateData.complaintId}
-          onChange={(e) => {
-            const selected = complaints.find(
-              (c) => c._id === e.target.value
-            );
-            setUpdateData({
-              complaintId: e.target.value,
-              staffAssigned: selected?.staffAssigned || "",
-              remarks: "",
-            });
-          }}
-          required
-        >
-          <option value="">Select In-Progress Complaint</option>
-          {complaints.map((c) => (
-            <option key={c._id} value={c._id}>
-              {c.studentName} - {c.registerNo}
-            </option>
-          ))}
-        </select>
+      <div className="section-card">
 
-        <input
-          type="text"
-          value={updateData.staffAssigned}
-          readOnly
-          placeholder="Staff Assigned"
-        />
+        <h3 style={{ marginTop: "30px" }}>
+          Resolve Complaint
+        </h3>
 
-        <input
-          type="text"
-          name="remarks"
-          placeholder="Remarks / Work Done"
-          value={updateData.remarks}
-          onChange={handleUpdateChange}
-          required
-          style={{ flex: "1" }}
-        />
-
-        <button
-          type="submit"
+        <form
+          onSubmit={handleUpdateSubmit}
           style={{
-            background: "green",
-            color: "white",
-            border: "none",
-            padding: "10px 20px",
-            borderRadius: "6px",
-            cursor: "pointer",
+            background: "#fff",
+            padding: "20px",
+            borderRadius: "10px",
+            marginTop: "10px",
+            display: "flex",
+            gap: "10px",
+            flexWrap: "wrap",
           }}
         >
-          Mark Completed
-        </button>
-      </form>
+
+          {/* Complaint Select */}
+
+          <select
+            name="complaintId"
+            value={updateData.complaintId}
+            onChange={(e) => {
+
+              const selected = complaints.find(
+                (c) => c._id === e.target.value
+              );
+
+              setSelectedComplaint(selected);
+
+              setUpdateData({
+                complaintId: e.target.value,
+                staffAssigned: selected?.staffAssigned || "",
+                remarks: "",
+              });
+
+            }}
+            required
+          >
+
+            <option value="">
+              Select Complaint
+            </option>
+
+            {complaints.map((c) => (
+              <option key={c._id} value={c._id}>
+                {c.studentName} - {c.registerNo}
+              </option>
+            ))}
+
+          </select>
+
+
+          {/* Complaint Details Box */}
+
+          {selectedComplaint && (
+
+            <div
+              style={{
+                width: "100%",
+                background: "#f5f7fb",
+                padding: "15px",
+                borderRadius: "8px",
+                marginTop: "10px",
+                display: "grid",
+                gridTemplateColumns: "repeat(2,1fr)",
+                gap: "10px",
+              }}
+            >
+
+              <div>
+                <b>Student Name :</b>{" "}
+                {selectedComplaint.studentName}
+              </div>
+
+              <div>
+                <b>Roll No :</b>{" "}
+                {selectedComplaint.registerNo}
+              </div>
+
+              <div>
+                <b>Problem :</b>{" "}
+                {selectedComplaint.type}
+              </div>
+
+              <div>
+                <b>Description :</b>{" "}
+                {selectedComplaint.description}
+              </div>
+
+            </div>
+
+          )}
+
+
+          {/* Staff Assigned */}
+
+          <input
+            type="text"
+            value={updateData.staffAssigned}
+            readOnly
+            placeholder="Staff Assigned"
+          />
+
+
+          {/* Remarks */}
+
+          <input
+            type="text"
+            name="remarks"
+            placeholder="Remarks / Work Done"
+            value={updateData.remarks}
+            onChange={handleUpdateChange}
+            required
+            style={{ flex: "1" }}
+          />
+
+
+          {/* Submit */}
+
+          <button
+            type="submit"
+            style={{
+              background: "green",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            Mark Completed
+          </button>
+
+        </form>
+
       </div>
+
 
       {/* ================= SUMMARY TABLE ================= */}
-       <div className="section-card">
-      <h3 style={{ marginTop: "40px" }}>Complaint Resolution Summary</h3>
 
-      <table className="complaint-table">
-        <thead style={{ background: "#1f3c88", color: "white" }}>
-          <tr>
-            <th>Student Name</th>
-            <th>Roll No</th>
-            <th>Problem</th>
-            <th>Staff Assigned</th>
-            <th>Remarks</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+      <div className="section-card">
 
-        <tbody>
-          {resolvedComplaints.length === 0 ? (
+        <h3 style={{ marginTop: "40px" }}>
+          Complaint Resolution Summary
+        </h3>
+
+        <table className="complaint-table">
+
+          <thead style={{ background: "#1f3c88", color: "white" }}>
             <tr>
-              <td colSpan="6" style={{ textAlign: "center" }}>
-                No completed complaints
-              </td>
+              <th>Student Name</th>
+              <th>Roll No</th>
+              <th>Problem</th>
+              <th>Staff Assigned</th>
+              <th>Remarks</th>
+              <th>Status</th>
             </tr>
-          ) : (
-            resolvedComplaints.map((c) => (
-              <tr key={c._id}>
-                <td>{c.studentName}</td>
-                <td>{c.registerNo}</td>
-                <td>{c.type}</td>
-                <td>{c.staffAssigned}</td>
-                <td>{c.remarks}</td>
-                <td>
-                  <span
-                    style={{
-                      padding: "4px 10px",
-                      borderRadius: "12px",
-                      background: "green",
-                      color: "white",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Completed
-                  </span>
+          </thead>
+
+          <tbody>
+
+            {resolvedComplaints.length === 0 ? (
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center" }}>
+                  No completed complaints
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              resolvedComplaints.map((c) => (
+                <tr key={c._id}>
+
+                  <td>{c.studentName}</td>
+
+                  <td>{c.registerNo}</td>
+
+                  <td>{c.type}</td>
+
+                  <td>{c.staffAssigned}</td>
+
+                  <td>{c.remarks}</td>
+
+                  <td>
+                    <span
+                      style={{
+                        padding: "4px 10px",
+                        borderRadius: "12px",
+                        background: "green",
+                        color: "white",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Completed
+                    </span>
+                  </td>
+
+                </tr>
+              ))
+            )}
+
+          </tbody>
+
+        </table>
+
       </div>
+
     </div>
   );
 };
