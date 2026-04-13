@@ -3,32 +3,42 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
-
-const authRoutes = require("./routes/authRoutes");
-
-console.log("authRoutes 👉", authRoutes);
-
 const app = express();
 
-// middleware
-app.use(cors());
+// Middleware
+app.use(cors({
+  origin: process.env.CLIENT_URL || "*",
+  credentials: true
+}));
 app.use(express.json());
 
-// routes
-
-app.use("/api/auth", authRoutes);
+// Import Routes
+const authRoutes = require("./routes/authRoutes");
 const complaintRoutes = require("./routes/complaintRoutes");
+
+// Debug log (optional)
+console.log("authRoutes 👉", typeof authRoutes);
+
+// Register Routes
+app.use("/api/auth", authRoutes);
 app.use("/api/complaints", complaintRoutes);
-app.use("/api/complaints", require("./routes/complaintRoutes"));
 
+// Default Route
+app.get("/", (req, res) => {
+  res.send("🚀 Smart Service Management Backend Running");
+});
 
-
-// DB connect
+// MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => console.log("✅ MongoDB connected successfully"))
-  .catch((err) => console.error("❌ MongoDB error:", err));
+  .catch((err) => {
+    console.error("❌ MongoDB error:", err);
+    process.exit(1);
+  });
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+// Start Server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
