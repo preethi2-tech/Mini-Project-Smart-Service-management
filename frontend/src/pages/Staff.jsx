@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "../api";
 
 const Staff = () => {
   const [complaints, setComplaints] = useState([]);
@@ -23,9 +23,7 @@ const Staff = () => {
   // Fetch Assigned Complaints
   const fetchAssignedComplaints = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/complaints/assigned"
-      );
+      const res = await api.get("/api/complaints/assigned");
 
       const inProgress = res.data.filter(
         (c) => c.status === "In Progress"
@@ -40,9 +38,7 @@ const Staff = () => {
   // Fetch Completed Complaints
   const fetchResolvedComplaints = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/complaints"
-      );
+      const res = await api.get("/api/complaints");
 
       const completed = res.data.filter(
         (c) =>
@@ -70,8 +66,8 @@ const Staff = () => {
     e.preventDefault();
 
     try {
-      await axios.put(
-        `http://localhost:5000/api/complaints/update/${updateData.complaintId}`,
+      await api.put(
+        `/api/complaints/update/${updateData.complaintId}`,
         {
           remarks: updateData.remarks,
           staffAssigned: updateData.staffAssigned,
