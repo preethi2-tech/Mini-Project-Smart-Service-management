@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_BASE } from "../api";
+import { api } from "../api";
 import "./Login.css";
 
 const Login = () => {
@@ -14,26 +14,19 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_BASE}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ username, password })
+      const res = await api.post("/api/auth/login", {
+        username,
+        password,
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message);
-        return;
-      }
 
       // ✅ Login success
       navigate("/dashboard/home");
-
     } catch (err) {
-      setError("Server error");
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Server error");
+      }
     }
   };
 

@@ -7,10 +7,35 @@ require("dotenv").config();
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL, // Allow all origins for now
-  credentials: true
-}));
+const defaultOrigins = [
+  "http://localhost:5173",
+  "https://smart-frontend-kqm8.onrender.com",
+];
+
+const allowedOrigins = [
+  ...defaultOrigins,
+  ...(process.env.CLIENT_URL
+    ? process.env.CLIENT_URL.split(",").map((origin) => origin.trim())
+    : []),
+].filter(Boolean);
+
+const corsOptions = allowedOrigins.length
+  ? {
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error(`CORS policy blocked origin: ${origin}`));
+        }
+      },
+      credentials: true,
+    }
+  : {
+      origin: true,
+      credentials: true,
+    };
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Import Routes
